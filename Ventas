@@ -1,0 +1,260 @@
+using System;
+using System.Collections.Generic;
+using LoteríaPrograma;
+
+namespace LoteríaPrograma
+{
+    public class Ventas
+    {
+        // Listas para almacenar las ventas
+        private List<VentaDiaria> ventasDiarias = new List<VentaDiaria>();
+        private List<VentaSemanal> ventasSemanales = new List<VentaSemanal>();
+        private Dictionary<int, string> ventasMensuales = new Dictionary<int, string>();
+
+        // Método para vender diario
+        public void VenderDiario()
+        {
+            Console.WriteLine("\n--- Vender Diario ---");
+
+            // Crear una nueva venta diaria
+            var venta = new VentaDiaria();
+
+            // Solicitar el nombre del cliente
+            Console.Write("Ingrese el nombre del cliente: ");
+            venta.Nombre = Console.ReadLine();
+
+            // Solicitar 5 números únicos
+            for (int i = 0; i < 5; i++)
+            {
+                int numero;
+                do
+                {
+                    Console.Write($"Ingrese el número {i + 1} (0-100): ");
+                    if (int.TryParse(Console.ReadLine(), out numero) && ValidarNumeroUnico(numero, venta.Numeros, i) && ValidarRango(numero))
+                    {
+                        venta.Numeros[i] = numero;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Número inválido o repetido. Intente de nuevo.");
+                    }
+                } while (true);
+            }
+
+            // Agregar la venta a la lista
+            ventasDiarias.Add(venta);
+            Console.WriteLine("Venta diaria registrada con éxito.");
+        }
+
+        // Método para vender semanal
+        public void VenderSemanal()
+        {
+            Console.WriteLine("\n--- Vender Semanal ---");
+
+            // Crear una nueva venta semanal
+            var venta = new VentaSemanal();
+
+            // Solicitar el nombre del cliente
+            Console.Write("Ingrese el nombre del cliente: ");
+            venta.Nombre = Console.ReadLine();
+
+            // Solicitar 2 números únicos
+            for (int i = 0; i < 2; i++)
+            {
+                int numero;
+                do
+                {
+                    Console.Write($"Ingrese el número {i + 1} (0-100): ");
+                    if (int.TryParse(Console.ReadLine(), out numero) && ValidarNumeroUnico(numero, venta.Numeros, i) && ValidarRango(numero))
+                    {
+                        venta.Numeros[i] = numero;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Número inválido o repetido. Intente de nuevo.");
+                    }
+                } while (true);
+            }
+
+            // Agregar la venta a la lista
+            ventasSemanales.Add(venta);
+            Console.WriteLine("Venta semanal registrada con éxito.");
+        }
+
+        // Método para vender mensual
+        public void VenderMensual()
+        {
+            Console.WriteLine("\n--- Vender Mensual ---");
+
+            // Solicitar el nombre del cliente
+            Console.Write("Ingrese el nombre del cliente: ");
+            string nombre = Console.ReadLine();
+
+            // Solicitar 1 número único
+            int numero;
+            do
+            {
+                Console.Write("Ingrese el número (0-100): ");
+                if (int.TryParse(Console.ReadLine(), out numero) && ValidarRango(numero) && !ventasMensuales.ContainsKey(numero))
+                {
+                    ventasMensuales[numero] = nombre;
+                    Console.WriteLine("Venta mensual registrada con éxito.");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Número inválido o ya comprado. Intente de nuevo.");
+                }
+            } while (true);
+        }
+
+        // Función para validar que un número esté en el rango permitido
+        private bool ValidarRango(int numero)
+        {
+            return numero >= 0 && numero <= 100;
+        }
+
+        // Función para validar que un número sea único
+        private bool ValidarNumeroUnico(int numero, int[] numeros, int tamaño)
+        {
+            for (int i = 0; i < tamaño; i++)
+            {
+                if (numeros[i] == numero)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    // Clase para representar una venta diaria
+    public class VentaDiaria
+    {
+        public string Nombre { get; set; } // Nombre del cliente
+        public int[] Numeros { get; set; } = new int[5]; // 5 números comprados
+    }
+
+    // Clase para representar una venta semanal
+    public class VentaSemanal
+    {
+        public string Nombre { get; set; } // Nombre del cliente
+        public int[] Numeros { get; set; } = new int[2]; // 2 números comprados
+    }
+}
+
+static void VenderDiario(List<VentaDiaria> ventas)
+{
+    Console.WriteLine("\n--- Vender Diario ---");
+
+    // Crear una nueva venta diaria
+    var venta = new VentaDiaria();
+
+    // Solicitar el nombre del cliente
+    Console.Write("Ingrese el nombre del cliente: ");
+    venta.Nombre = Console.ReadLine();
+
+    // Solicitar 5 números únicos
+    for (int i = 0; i < 5; i++)
+    {
+        int numero;
+        do
+        {
+            Console.Write($"Ingrese el número {i + 1} (0-100): ");
+            if (int.TryParse(Console.ReadLine(), out numero) && ValidarNumeroUnico(numero, venta.Numeros, i) && ValidarRango(numero))
+            {
+                venta.Numeros[i] = numero;
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Número inválido o repetido. Intente de nuevo.");
+            }
+        } while (true);
+    }
+
+    // Agregar la venta a la lista
+    ventas.Add(venta);
+    Console.WriteLine("Venta diaria registrada con éxito.");
+}
+
+static void VenderSemanal(List<VentaSemanal> ventas)
+{
+    Console.WriteLine("\n--- Vender Semanal ---");
+
+    // Crear una nueva venta semanal
+    var venta = new VentaSemanal();
+
+    // Solicitar el nombre del cliente
+    Console.Write("Ingrese el nombre del cliente: ");
+    venta.Nombre = Console.ReadLine();
+
+    // Solicitar 2 números únicos
+    for (int i = 0; i < 2; i++)
+    {
+        int numero;
+        do
+        {
+            Console.Write($"Ingrese el número {i + 1} (0-100): ");
+            if (int.TryParse(Console.ReadLine(), out numero) && ValidarNumeroUnico(numero, venta.Numeros, i) && ValidarRango(numero))
+            {
+                venta.Numeros[i] = numero;
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Número inválido o repetido. Intente de nuevo.");
+            }
+        } while (true);
+    }
+
+    // Agregar la venta a la lista
+    ventas.Add(venta);
+    Console.WriteLine("Venta semanal registrada con éxito.");
+}
+
+static void VenderMensual(Dictionary<int, string> ventas)
+{
+    Console.WriteLine("\n--- Vender Mensual ---");
+
+    // Solicitar el nombre del cliente
+    Console.Write("Ingrese el nombre del cliente: ");
+    string nombre = Console.ReadLine();
+
+    // Solicitar 1 número único
+    int numero;
+    do
+    {
+        Console.Write("Ingrese el número (0-100): ");
+        if (int.TryParse(Console.ReadLine(), out numero) && ValidarRango(numero) && !ventas.ContainsKey(numero))
+        {
+            ventas[numero] = nombre;
+            Console.WriteLine("Venta mensual registrada con éxito.");
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Número inválido o ya comprado. Intente de nuevo.");
+        }
+    } while (true);
+}
+// Función para validar que un número esté en el rango permitido
+static bool ValidarRango(int numero)
+{
+    return numero >= 0 && numero <= 100;
+}
+
+// Función para validar que un número sea único
+static bool ValidarNumeroUnico(int numero, int[] numeros, int tamaño)
+{
+    for (int i = 0; i < tamaño; i++)
+    {
+        if (numeros[i] == numero)
+        {
+            return false;
+        }
+    }
+    return true;
+}
