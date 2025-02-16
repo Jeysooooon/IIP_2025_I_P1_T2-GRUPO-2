@@ -1,0 +1,80 @@
+class JuegoLoteria
+{
+    private VendedorLoteria vendedor;
+    public JuegoLoteria(VendedorLoteria vendedor)
+    {
+        this.vendedor = vendedor;
+    }
+
+    public void JugarDiario()
+    {
+        Random rand = new Random();
+        List<int> ganadores = Enumerable.Range(0, 5).Select(_ => rand.Next(0, 101)).ToList();
+        Console.WriteLine($"Números ganadores: {string.Join(", ", ganadores)}");
+
+        bool huboGanador = false;
+        foreach (var venta in vendedor.ventasDiarias)
+        {
+            int coincidencias = venta.Value.Count(num => ganadores.Contains(num));
+            if (coincidencias >= 3)
+            {
+                int premio = coincidencias == 3 ? 5000 : coincidencias == 4 ? 10000 : 100000;
+                Console.WriteLine($"Ganador: {venta.Key}, Premio: {premio} Lempiras");
+                huboGanador = true;
+            }
+        }
+        if (!huboGanador)
+        {
+            Console.WriteLine("No hubo ganadores en el Juego Diario.");
+        }
+    }
+
+    public void JugarSemanal()
+    {
+        Random rand = new Random();
+        int num1 = rand.Next(0, 101);
+        int num2 = rand.Next(0, 101);
+        Console.WriteLine($"Números ganadores: {num1}, {num2}");
+
+        bool huboGanador = false;
+        foreach (var venta in vendedor.ventasSemanales)
+        {
+            bool primerNumero = venta.Value[0] == num1;
+            bool segundoNumero = venta.Value[1] == num2;
+            if (primerNumero && segundoNumero)
+            {
+                Console.WriteLine($"Ganador: {venta.Key}, Premio: 100,000.00 Lempiras");
+                huboGanador = true;
+            }
+            else if (primerNumero)
+            {
+                Console.WriteLine($"Ganador: {venta.Key}, Premio: 10,000.00 Lempiras");
+                huboGanador = true;
+            }
+            else if (segundoNumero)
+            {
+                Console.WriteLine($"Ganador: {venta.Key}, Premio: 1,000.00 Lempiras");
+                huboGanador = true;
+            }
+        }
+        if (!huboGanador)
+        {
+            Console.WriteLine("No hubo ganadores en el Juego Semanal.");
+        }
+    }
+
+    public void JugarMensual()
+    {
+        Random rand = new Random();
+        int numeroGanador = rand.Next(0, 101);
+        Console.WriteLine($"Número ganador mensual: {numeroGanador}");
+        if (vendedor.ventasMensuales.ContainsKey(numeroGanador))
+        {
+            Console.WriteLine($"Ganador: {vendedor.ventasMensuales[numeroGanador]}, Premio: 10,000.00 Lempiras");
+        }
+        else
+        {
+            Console.WriteLine("No hubo ganadores este mes.");
+        }
+    }
+}
